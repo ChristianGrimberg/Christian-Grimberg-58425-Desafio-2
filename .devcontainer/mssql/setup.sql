@@ -1,2 +1,2 @@
-CREATE DATABASE ApplicationDB;
+CREATE DATABASE Desafio2;
 GO
