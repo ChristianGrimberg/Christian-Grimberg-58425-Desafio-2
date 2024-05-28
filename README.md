@@ -53,6 +53,10 @@ Se deben crear las clases de acceso a datos para el proyecto final.
 * ModificarVenta()
 * EliminarVenta()
 
+## Ejemplo
+
+[Link al ejemplo](https://docs.google.com/presentation/d/1-_ZxAhULru54UOC91B0A1M-8dk3MoVluZ_f4-0n16tA/edit?usp=drive_link)
+
 ## Sugerencias
 
 * Se recomienda ya tener una solución con una aplicación de Escritorio o Consola para poder implementarlas y probarlas.
