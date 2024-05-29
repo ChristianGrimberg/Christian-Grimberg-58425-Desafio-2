@@ -2,23 +2,24 @@
 
 namespace Christian_Grimberg_58425_Desafio_2;
 
-public class GestorBaseDatos
+internal class GestorBaseDatos
 {
     private readonly string _connectionString;
-    public GestorBaseDatos(string baseDeDatos)
+    
+    internal GestorBaseDatos(string server, string baseDeDatos, string user, string password)
     {
-        this._connectionString = $"Server=.; User=sa; Password=P@ssw0rd;";
+        this._connectionString = $"Server={server}; User={user}; Password={password};";
         string newDatabaseQuery = $@"
                                 SET NOCOUNT OFF;
 
                                 IF NOT EXISTS(SELECT [name] FROM [sys].[databases] WHERE [name] = '{baseDeDatos}')
                                 BEGIN
                                     CREATE DATABASE [{baseDeDatos}];
-                                    SELECT 'Se crea la base de datos';
+                                    SELECT 'Se crea la base de datos [{baseDeDatos}]';
                                 END
                                 ELSE
                                 BEGIN
-                                    SELECT 'La base de datos ya existe';
+                                    SELECT 'La base de datos [{baseDeDatos}] ya existe';
                                 END
                                 ";
 

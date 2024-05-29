@@ -4,6 +4,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        GestorBaseDatos gestor = new GestorBaseDatos("Prueba");
+        GestorBaseDatos gestor = new GestorBaseDatos(".", "Desafio2", "sa", "P@ssw0rd");
     }
 }
