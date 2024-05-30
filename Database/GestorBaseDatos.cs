@@ -4,7 +4,7 @@ namespace Christian_Grimberg_58425_Desafio_2;
 
 internal static class GestorBaseDatos
 {
-    internal static void Inicializacion(string server, string baseDeDatos, string user, string password)
+    internal static SqlConnection? Inicializacion(string server, string baseDeDatos, string user, string password)
     {
         string newDatabase = $@"
         IF EXISTS(SELECT [name] FROM [sys].[databases] WHERE [name] = '{baseDeDatos}')
@@ -119,39 +119,39 @@ internal static class GestorBaseDatos
         ";
 
         string connectionString = $"Server={server}; User={user}; Password={password};";
+        SqlConnection connection = new SqlConnection(connectionString);
 
         try
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            connection.Open();
+
+            SqlCommand newDatabaseCommand = new SqlCommand(newDatabase, connection);
+
+            using (SqlDataReader newDatabaseReader = newDatabaseCommand.ExecuteReader())
             {
-                connection.Open();
-
-                SqlCommand newDatabaseCommand = new SqlCommand(newDatabase, connection);
-
-                using (SqlDataReader newDatabaseReader = newDatabaseCommand.ExecuteReader())
+                while (newDatabaseReader.Read())
                 {
-                    while (newDatabaseReader.Read())
-                    {
-                        Console.WriteLine(string.Format("[SQL INFO]: {0}", newDatabaseReader[0]));
-                    }
+                    Console.WriteLine(string.Format("[SQL INFO]: {0}", newDatabaseReader[0]));
                 }
-
-                SqlCommand newTablesCommand = new SqlCommand(newTables, connection);
-
-                using (SqlDataReader newTablesReader = newTablesCommand.ExecuteReader())
-                {
-                    while (newTablesReader.Read())
-                    {
-                        Console.WriteLine(string.Format("[SQL INFO]: {0}", newTablesReader[0]));
-                    }
-                }
-
-                connection.Close();
             }
+
+            SqlCommand newTablesCommand = new SqlCommand(newTables, connection);
+
+            using (SqlDataReader newTablesReader = newTablesCommand.ExecuteReader())
+            {
+                while (newTablesReader.Read())
+                {
+                    Console.WriteLine(string.Format("[SQL INFO]: {0}", newTablesReader[0]));
+                }
+            }
+
+            connection.Close();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"[SQL ERROR]: {ex.Message}");
         }
+
+        return connection;
     }
 }
