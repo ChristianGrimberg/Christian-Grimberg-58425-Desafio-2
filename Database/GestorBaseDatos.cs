@@ -2,11 +2,9 @@
 
 namespace Christian_Grimberg_58425_Desafio_2;
 
-internal class GestorBaseDatos
+internal static class GestorBaseDatos
 {
-    private readonly string _connectionString;
-
-    internal GestorBaseDatos(string server, string baseDeDatos, string user, string password)
+    internal static void Inicializacion(string server, string baseDeDatos, string user, string password)
     {
         string newDatabase = $@"
         IF EXISTS(SELECT [name] FROM [sys].[databases] WHERE [name] = '{baseDeDatos}')
@@ -120,11 +118,11 @@ internal class GestorBaseDatos
         SELECT 'Tablas y datos creados con exito en base de datos [{baseDeDatos}]';
         ";
 
-        _connectionString = $"Server={server}; User={user}; Password={password};";
+        string connectionString = $"Server={server}; User={user}; Password={password};";
 
         try
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
