@@ -6,6 +6,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        SqlConnection? conection = GestorBaseDatos.Inicializacion(server: ".", baseDeDatos: "Desafio2", user: "sa", password: "P@ssw0rd");
+        SqlConnection initializedConnection = GestorBaseDatos.Inicializacion(server: ".", baseDeDatos: "Desafio2", user: "sa", password: "P@ssw0rd");
     }
 }

@@ -4,7 +4,7 @@ namespace Christian_Grimberg_58425_Desafio_2;
 
 internal static class GestorBaseDatos
 {
-    internal static SqlConnection? Inicializacion(string server, string baseDeDatos, string user, string password)
+    internal static SqlConnection Inicializacion(string server, string baseDeDatos, string user, string password)
     {
         string newDatabase = $@"
         IF EXISTS(SELECT [name] FROM [sys].[databases] WHERE [name] = '{baseDeDatos}')
@@ -119,12 +119,12 @@ internal static class GestorBaseDatos
         ";
 
         string connectionString = $"Server={server}; User={user}; Password={password};";
+        
         SqlConnection connection = new SqlConnection(connectionString);
+        connection.Open();
 
         try
         {
-            connection.Open();
-
             SqlCommand newDatabaseCommand = new SqlCommand(newDatabase, connection);
 
             using (SqlDataReader newDatabaseReader = newDatabaseCommand.ExecuteReader())
@@ -144,13 +144,13 @@ internal static class GestorBaseDatos
                     Console.WriteLine(string.Format("[SQL INFO]: {0}", newTablesReader[0]));
                 }
             }
-
-            connection.Close();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"[SQL ERROR]: {ex.Message}");
         }
+
+        connection.Close();
 
         return connection;
     }
