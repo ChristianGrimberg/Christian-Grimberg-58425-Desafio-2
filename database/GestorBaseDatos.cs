@@ -5,8 +5,8 @@ namespace Christian_Grimberg_58425_Desafio_2;
 internal class GestorBaseDatos
 {
     private readonly string _connectionString;
-    private readonly SqlConnection _connection;    
-    
+    private readonly SqlConnection _connection;
+
     internal GestorBaseDatos(string server, string baseDeDatos, string user, string password)
     {
         _connectionString = $"Server={server}; User={user}; Password={password};";
@@ -34,7 +34,7 @@ internal class GestorBaseDatos
         connection.Open();
 
         SqlCommand command = new SqlCommand(sqlCommand, connection);
-        
+
         using (SqlDataReader reader = command.ExecuteReader())
         {
             while (reader.Read())
