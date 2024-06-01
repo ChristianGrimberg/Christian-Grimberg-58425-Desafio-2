@@ -4,9 +4,48 @@ namespace Christian_Grimberg_58425_Desafio_2;
 
 internal static class GestorBaseDatos
 {
-    internal static SqlConnection Inicializacion(string server, string baseDeDatos, string user, string password)
+    internal static SqlConnection Inicializacion(string server, string database, string user, string password)
     {
-        string newDatabase = $@"
+        string connectionString = $"Server={server}; User={user}; Password={password};";
+        
+        SqlConnection connection = new SqlConnection(connectionString);
+        connection.Open();
+
+        try
+        {
+            SqlCommand newDatabaseCommand = new SqlCommand(DeployDatabase(database), connection);
+
+            using (SqlDataReader newDatabaseReader = newDatabaseCommand.ExecuteReader())
+            {
+                while (newDatabaseReader.Read())
+                {
+                    Console.WriteLine(string.Format("[SQL INFO]: {0}", newDatabaseReader[0]));
+                }
+            }
+
+            SqlCommand newTablesCommand = new SqlCommand(DeployDatabaseStructure(database), connection);
+
+            using (SqlDataReader newTablesReader = newTablesCommand.ExecuteReader())
+            {
+                while (newTablesReader.Read())
+                {
+                    Console.WriteLine(string.Format("[SQL INFO]: {0}", newTablesReader[0]));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SQL ERROR]: {ex.Message}");
+        }
+
+        connection.Close();
+
+        return connection;
+    }
+
+    private static string DeployDatabase(string baseDeDatos)
+    {
+        return $@"
         IF EXISTS(SELECT [name] FROM [sys].[databases] WHERE [name] = '{baseDeDatos}')
         BEGIN
             ALTER DATABASE [{baseDeDatos}] SET single_user with rollback immediate;
@@ -16,8 +55,11 @@ internal static class GestorBaseDatos
         CREATE DATABASE [{baseDeDatos}];
         SELECT 'Conectado a la nueva base de datos [{baseDeDatos}]';
         ";
+    }
 
-        string newTables = $@"
+    private static string DeployDatabaseStructure(string baseDeDatos)
+    {
+        return $@"
         CREATE TABLE [{baseDeDatos}].[dbo].[Producto](
             [Id] [bigint] IDENTITY(1,1) NOT NULL,
             [Descripciones] [varchar](max) NOT NULL,
@@ -117,41 +159,5 @@ internal static class GestorBaseDatos
 
         SELECT 'Tablas y datos creados con exito en base de datos [{baseDeDatos}]';
         ";
-
-        string connectionString = $"Server={server}; User={user}; Password={password};";
-        
-        SqlConnection connection = new SqlConnection(connectionString);
-        connection.Open();
-
-        try
-        {
-            SqlCommand newDatabaseCommand = new SqlCommand(newDatabase, connection);
-
-            using (SqlDataReader newDatabaseReader = newDatabaseCommand.ExecuteReader())
-            {
-                while (newDatabaseReader.Read())
-                {
-                    Console.WriteLine(string.Format("[SQL INFO]: {0}", newDatabaseReader[0]));
-                }
-            }
-
-            SqlCommand newTablesCommand = new SqlCommand(newTables, connection);
-
-            using (SqlDataReader newTablesReader = newTablesCommand.ExecuteReader())
-            {
-                while (newTablesReader.Read())
-                {
-                    Console.WriteLine(string.Format("[SQL INFO]: {0}", newTablesReader[0]));
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[SQL ERROR]: {ex.Message}");
-        }
-
-        connection.Close();
-
-        return connection;
     }
 }

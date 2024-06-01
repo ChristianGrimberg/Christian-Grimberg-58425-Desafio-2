@@ -6,6 +6,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        SqlConnection initializedConnection = GestorBaseDatos.Inicializacion(server: ".", baseDeDatos: "Desafio2", user: "sa", password: "P@ssw0rd");
+        try
+        {
+            SqlConnection initializedConnection = GestorBaseDatos.Inicializacion(server: ".", database: "Desafio2", user: "sa", password: "P@ssw0rd");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[APPLICATION ERROR]: {ex.Message}");
+        }
     }
 }
