@@ -4,6 +4,12 @@ namespace Christian_Grimberg_58425_Desafio_2;
 
 public class Usuario
 {
+    private bool _isEmpty;
+    public bool IsEmpty
+    {
+        get { return _isEmpty; }
+    }
+
     private int id;
     public int Id
     {
@@ -14,7 +20,11 @@ public class Usuario
         }
         set
         {
-            if (value.GetType() == typeof(int)) id = value;
+            if (value.GetType() == typeof(int))
+            {
+                id = value;
+                _isEmpty = false;
+            }
             else id = 0;
         }
     }
@@ -29,7 +39,11 @@ public class Usuario
         }
         set
         {
-            if (!string.IsNullOrEmpty(value)) nombre = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                nombre = value;
+                _isEmpty = false;
+            }
             else nombre = string.Empty;
         }
     }
@@ -44,7 +58,11 @@ public class Usuario
         }
         set
         {
-            if (!string.IsNullOrEmpty(value)) apellido = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                apellido = value;
+                _isEmpty = false;
+            }
             else apellido = string.Empty;
         }
     }
@@ -59,7 +77,11 @@ public class Usuario
         }
         set
         {
-            if (!string.IsNullOrEmpty(value)) nombreUsuario = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                nombreUsuario = value;
+                _isEmpty = false;
+            }
             else nombreUsuario = string.Empty;
         }
     }
@@ -74,7 +96,11 @@ public class Usuario
         }
         set
         {
-            if (!string.IsNullOrEmpty(value)) contraseña = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                contraseña = value;
+                _isEmpty = false;
+            }
             else contraseña = string.Empty;
         }
     }
@@ -89,12 +115,27 @@ public class Usuario
         }
         set
         {
-            if (!string.IsNullOrEmpty(value)) mail = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                mail = value;
+                _isEmpty = false;
+            }
             else mail = string.Empty;
         }
     }
 
-    public Usuario() { }
+    public Usuario()
+    {
+        if(string.IsNullOrEmpty(nombre)
+            && string.IsNullOrEmpty(apellido)
+            && string.IsNullOrEmpty(nombreUsuario)
+            && string.IsNullOrEmpty(contraseña)
+            && string.IsNullOrEmpty(mail))
+        {
+            _isEmpty = true;
+        }
+        else _isEmpty = false;
+    }
 
     public Usuario(int _id, string _nombre, string _apellido, string _nombreUsuario, string _contraseña, string _mail)
     {

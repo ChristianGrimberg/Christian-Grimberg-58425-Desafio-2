@@ -7,7 +7,7 @@ internal static class GestorBaseDatos
     internal static SqlConnection Inicializacion(string server, string database, string user, string password)
     {
         string connectionString = $"Server={server}; User={user}; Password={password};";
-        
+
         SqlConnection connection = new SqlConnection(connectionString);
         connection.Open();
 

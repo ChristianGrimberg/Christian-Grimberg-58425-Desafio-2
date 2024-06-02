@@ -6,13 +6,20 @@ class Program
 {
     static void Main(string[] args)
     {
-        try
-        {
-            SqlConnection initializedConnection = GestorBaseDatos.Inicializacion(server: ".", database: "Desafio2", user: "sa", password: "P@ssw0rd");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[APPLICATION ERROR]: {ex.Message}");
-        }
+        string server = ".";
+        string database = "Desafio2";
+        string user = "sa";
+        string password = "P@ssw0rd";
+
+        SqlConnection initializedConnection = GestorBaseDatos.Inicializacion(server, database, user, password);
+        initializedConnection.Open();
+        initializedConnection.ChangeDatabase(database);
+
+        Console.WriteLine("Presione una tecla para continuar...");
+        Console.ReadKey();
+
+        while (GestorMenu.Menu(initializedConnection)) { }
+
+        initializedConnection.Close();
     }
 }
