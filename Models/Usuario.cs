@@ -126,11 +126,13 @@ public class Usuario
 
     public Usuario()
     {
-        if(string.IsNullOrEmpty(nombre)
+        if(
+            string.IsNullOrEmpty(nombre)
             && string.IsNullOrEmpty(apellido)
             && string.IsNullOrEmpty(nombreUsuario)
             && string.IsNullOrEmpty(contraseña)
-            && string.IsNullOrEmpty(mail))
+            && string.IsNullOrEmpty(mail)
+        )
         {
             _isEmpty = true;
         }
