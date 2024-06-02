@@ -34,7 +34,8 @@
 				"ms-dotnettools.csharp",
 				"ms-mssql.mssql",
 				"eamodio.gitlens",
-				"ms-dotnettools.csdevkit"
+				"ms-dotnettools.csdevkit",
+				"github.vscode-github-actions"
 			]
 		}
 	},
