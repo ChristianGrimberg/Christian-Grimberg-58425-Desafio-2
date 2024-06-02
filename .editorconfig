@@ -176,6 +176,9 @@ csharp_preserve_single_line_statements = true
 # IDE0090: Use 'new(...)'
 csharp_style_implicit_object_creation_when_type_is_apparent = false
 
+# CS8600: Converting null literal or possible null value to non-nullable type.
+dotnet_diagnostic.CS8600.severity = none
+
 [*.{cs,vb}]
 
 # Naming rules
