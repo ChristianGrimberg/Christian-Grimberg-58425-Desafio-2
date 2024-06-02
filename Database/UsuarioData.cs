@@ -155,4 +155,43 @@ internal static class UsuarioData
 
         return created;
     }
+
+    internal static bool EliminarUsuario(SqlConnection connection, Usuario user)
+    {
+        bool created = false;
+        string queryDeleteUser = $@"
+        DELETE FROM [{connection.Database}].[dbo].[ProductoVendido]
+        WHERE [IdVenta] IN (SELECT [Id]
+                            FROM [{connection.Database}].[dbo].[Venta]
+                            WHERE [IdUsuario] = '{user.Id}');
+
+        DELETE FROM [{connection.Database}].[dbo].[ProductoVendido]
+        WHERE [IdProducto] IN (SELECT [Id]
+                            FROM [{connection.Database}].[dbo].[Producto]
+                            WHERE [IdUsuario] = '{user.Id}');
+
+        DELETE FROM [{connection.Database}].[dbo].[Producto]
+        WHERE [IdUsuario] = '{user.Id}';
+
+        DELETE FROM [{connection.Database}].[dbo].[Venta]
+        WHERE [IdUsuario] = '{user.Id}';
+
+        DELETE FROM [{connection.Database}].[dbo].[Usuario]
+        WHERE [Id] = '{user.Id}';
+        ";
+
+        try
+        {
+            using (SqlCommand command = new SqlCommand(queryDeleteUser, connection))
+            {
+                created = (command.ExecuteNonQuery() > 0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SQL ERROR]: {ex.Message}");
+        }
+
+        return created;
+    }
 }

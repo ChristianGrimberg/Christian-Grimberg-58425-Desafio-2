@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.EntityFrameworkCore.Update;
 
 namespace Christian_Grimberg_58425_Desafio_2;
@@ -73,7 +74,7 @@ internal static class GestorMenu
         {
             case "1":
                 Console.Clear();
-                string userId = Input("Ingrese el ID a buscar");
+                string userId = Input("Ingrese el ID del usuario a buscar");
                 Usuario user = UsuarioData.ObtenerUsuario(connection, Convert.ToInt32(userId));
 
                 if (!user.IsEmpty)
@@ -153,7 +154,7 @@ internal static class GestorMenu
                                 Console.Write("Ingrese el nuevo nombre: ");
                                 userToUpdate.Nombre = Console.ReadLine();
 
-                                if(!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
+                                if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
                                     Console.WriteLine("El nombre se modificó con éxito.");
                                 }
@@ -166,7 +167,7 @@ internal static class GestorMenu
                                 Console.Write("Ingrese el nuevo apellido: ");
                                 userToUpdate.Apellido = Console.ReadLine();
 
-                                if(!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
+                                if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
                                     Console.WriteLine("El apellido se modificó con éxito.");
                                 }
@@ -179,7 +180,7 @@ internal static class GestorMenu
                                 Console.Write("Ingrese el nuevo nombre de usuario: ");
                                 userToUpdate.NombreUsuario = Console.ReadLine();
 
-                                if(!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
+                                if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
                                     Console.WriteLine("El nombre del usuario se modificó con éxito.");
                                 }
@@ -192,7 +193,7 @@ internal static class GestorMenu
                                 Console.Write("Ingrese la nueva contraseña: ");
                                 userToUpdate.Contraseña = Console.ReadLine();
 
-                                if(!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
+                                if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
                                     Console.WriteLine("La contraseña se modificó con éxito.");
                                 }
@@ -205,7 +206,7 @@ internal static class GestorMenu
                                 Console.Write("Ingrese el nuevo email: ");
                                 userToUpdate.Mail = Console.ReadLine();
 
-                                if(!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
+                                if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
                                     Console.WriteLine("El email se modificó con éxito.");
                                 }
@@ -217,6 +218,30 @@ internal static class GestorMenu
                             default:
                                 break;
                         }
+                    }
+                }
+                break;
+            case "5":
+                string agreeToDelete;
+
+                Console.Clear();
+                string userIdToDelete = Input("Ingrese el ID del usuario y toda su actividad a eliminar");
+                Usuario userToDelete = UsuarioData.ObtenerUsuario(connection, Convert.ToInt32(userIdToDelete));
+
+                if (!userToDelete.IsEmpty)
+                {
+                    Console.WriteLine("\n===========DATOS DEL USUARIO==========\n");
+                    Console.WriteLine(userToDelete);
+                    Console.WriteLine("======================================");
+                    agreeToDelete = Input("Desea eliminar al usuario y toda su actividad? S(Si) - N(No)");
+
+                    if (
+                        !string.IsNullOrEmpty(agreeToDelete)
+                        && agreeToDelete.ToUpper()[0] == 'S'
+                        && UsuarioData.EliminarUsuario(connection, userToDelete)
+                    )
+                    {
+                        Console.WriteLine("Se eliminó el usuario y toda su actividad.");
                     }
                 }
                 break;
