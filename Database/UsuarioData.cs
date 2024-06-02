@@ -126,4 +126,33 @@ internal static class UsuarioData
 
         return created;
     }
+
+    internal static bool ModificarUsuario(SqlConnection connection, Usuario user)
+    {
+        bool created = false;
+        string queryUpdatetUser = $@"
+        UPDATE [{connection.Database}].[dbo].[Usuario]
+        SET
+            [Nombre] = '{user.Nombre}'
+            ,[Apellido] = '{user.Apellido}'
+            ,[NombreUsuario] ='{user.NombreUsuario}'
+            ,[Contraseña] = '{user.Contraseña}'
+            ,[Mail] = '{user.Mail}'
+        WHERE [Id] = '{user.Id}';
+        ";
+
+        try
+        {
+            using (SqlCommand command = new SqlCommand(queryUpdatetUser, connection))
+            {
+                created = (command.ExecuteNonQuery() > 0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SQL ERROR]: {ex.Message}");
+        }
+
+        return created;
+    }
 }

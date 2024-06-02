@@ -18,7 +18,7 @@ class Program
         Console.WriteLine("Presione una tecla para continuar...");
         Console.ReadKey();
 
-        while (GestorMenu.Menu(initializedConnection)) { }
+        while (GestorMenu.MenuPrincipal(initializedConnection)) { }
 
         initializedConnection.Close();
     }
