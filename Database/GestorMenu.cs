@@ -71,6 +71,34 @@ internal static class GestorMenu
                             Console.WriteLine("No hay usuarios en el sistema");
                         }
                         break;
+                    case 3:
+                        Usuario newUser = new Usuario();
+                        Console.Clear();
+                        try
+                        {
+                            Console.WriteLine("===========NUEVO USUARIO==========\n");
+                            Console.Write("Ingrese el nombre: ");
+                            newUser.Nombre = Console.ReadLine();
+                            Console.Write("Ingrese el Apellido: ");
+                            newUser.Apellido = Console.ReadLine();
+                            Console.Write("Ingrese el nombre de inicio de sesion: ");
+                            newUser.NombreUsuario = Console.ReadLine();
+                            Console.Write("Ingrese la contraseña: ");
+                            newUser.Contraseña = Console.ReadLine();
+                            Console.Write("Ingrese el email: ");
+                            newUser.Mail = Console.ReadLine();
+                            Console.WriteLine("==================================");
+
+                            if(!newUser.IsEmpty && UsuarioData.CrearUsuario(connection, newUser))
+                            {
+                                Console.WriteLine("Usuario creado con éxito");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[APPLICATION ERROR]: {ex.Message}");
+                        }
+                        break;
                     default:
                         Console.WriteLine("Opción no encontrada");
                         break;

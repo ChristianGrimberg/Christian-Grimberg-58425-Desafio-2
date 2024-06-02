@@ -9,15 +9,14 @@ internal static class UsuarioData
         Usuario user = new Usuario();
         string queryGetUserByID = $@"
         SELECT
-				[Id]
-				,[Nombre]
-				,[Apellido]
-				,[NombreUsuario]
-				,[Contraseña]
-				,[Mail]
+            [Id]
+            ,[Nombre]
+            ,[Apellido]
+            ,[NombreUsuario]
+            ,[Contraseña]
+            ,[Mail]
 		FROM [{connection.Database}].[dbo].[Usuario]
-        WHERE
-                [Id] = '{id.ToString()}';
+        WHERE [Id] = '{id.ToString()}';
         ";
 
         try
@@ -55,12 +54,12 @@ internal static class UsuarioData
         List<Usuario> listado = new List<Usuario>();
         string queryGetUsers = $@"
 		SELECT
-				[Id]
-				,[Nombre]
-				,[Apellido]
-				,[NombreUsuario]
-				,[Contraseña]
-				,[Mail]
+            [Id]
+            ,[Nombre]
+            ,[Apellido]
+            ,[NombreUsuario]
+            ,[Contraseña]
+            ,[Mail]
 		FROM [{connection.Database}].[dbo].[Usuario];
         ";
 
@@ -91,5 +90,40 @@ internal static class UsuarioData
         }
 
         return listado;
+    }
+
+    internal static bool CrearUsuario(SqlConnection connection, Usuario user)
+    {
+        bool created = false;
+        string queryInsertUser = $@"
+        INSERT INTO [{connection.Database}].[dbo].[Usuario] (
+            [Nombre]
+            ,[Apellido]
+            ,[NombreUsuario]
+            ,[Contraseña]
+            ,[Mail]
+        )
+        VALUES (
+            '{user.Nombre}'
+            ,'{user.Apellido}'
+            ,'{user.NombreUsuario}'
+            ,'{user.Contraseña}'
+            ,'{user.Mail}'
+        );
+        ";
+
+        try
+        {
+            using (SqlCommand command = new SqlCommand(queryInsertUser, connection))
+            {
+                created = (command.ExecuteNonQuery() > 0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SQL ERROR]: {ex.Message}");
+        }
+
+        return created;
     }
 }
