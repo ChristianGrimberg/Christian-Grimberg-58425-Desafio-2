@@ -2,7 +2,7 @@
 
 namespace Christian_Grimberg_58425_Desafio_2;
 
-public class UsuarioData
+public class Usuario
 {
     private int id;
     public int Id
@@ -94,9 +94,9 @@ public class UsuarioData
         }
     }
 
-    public UsuarioData() { }
+    public Usuario() { }
 
-    public UsuarioData(int _id, string _nombre, string _apellido, string _nombreUsuario, string _contraseña, string _mail)
+    public Usuario(int _id, string _nombre, string _apellido, string _nombreUsuario, string _contraseña, string _mail)
     {
         Id = _id;
         Nombre = _nombre;

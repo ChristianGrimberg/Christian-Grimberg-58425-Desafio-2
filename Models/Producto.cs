@@ -2,7 +2,7 @@
 
 namespace Christian_Grimberg_58425_Desafio_2;
 
-public class ProductoData
+public class Producto
 {
     private int id;
     public int Id
@@ -94,9 +94,9 @@ public class ProductoData
         }
     }
 
-    public ProductoData() { }
+    public Producto() { }
 
-    public ProductoData(int _id, string _descripcion, decimal _costo, decimal _precioVenta, int _stock, int _idUsuario)
+    public Producto(int _id, string _descripcion, decimal _costo, decimal _precioVenta, int _stock, int _idUsuario)
     {
         Id = _id;
         Descripcion = _descripcion;
