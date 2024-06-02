@@ -4,6 +4,12 @@ namespace Christian_Grimberg_58425_Desafio_2;
 
 public class Producto
 {
+    private bool _isEmpty;
+    public bool IsEmpty
+    {
+        get { return _isEmpty; }
+    }
+
     private int id;
     public int Id
     {
@@ -14,7 +20,11 @@ public class Producto
         }
         set
         {
-            if (value.GetType() == typeof(int)) id = value;
+            if (value.GetType() == typeof(int))
+            {
+                id = value;
+                _isEmpty = false;
+            }
             else id = 0;
         }
     }
@@ -29,7 +39,11 @@ public class Producto
         }
         set
         {
-            if (!string.IsNullOrEmpty(value)) descripcion = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                descripcion = value;
+                _isEmpty = false;
+            }
             else descripcion = string.Empty;
         }
     }
@@ -44,7 +58,11 @@ public class Producto
         }
         set
         {
-            if (value.GetType() == typeof(decimal)) costo = value;
+            if (value.GetType() == typeof(decimal))
+            {
+                costo = value;
+                _isEmpty = false;
+            }
             else costo = 0;
         }
     }
@@ -59,7 +77,11 @@ public class Producto
         }
         set
         {
-            if (value.GetType() == typeof(decimal)) precioVenta = value;
+            if (value.GetType() == typeof(decimal))
+            {
+                precioVenta = value;
+                _isEmpty = false;
+            }
             else precioVenta = 0;
         }
     }
@@ -74,7 +96,11 @@ public class Producto
         }
         set
         {
-            if (value.GetType() == typeof(int)) stock = value;
+            if (value.GetType() == typeof(int))
+            {
+                stock = value;
+                _isEmpty = false;
+            }
             else stock = 0;
         }
     }
@@ -89,12 +115,28 @@ public class Producto
         }
         set
         {
-            if (value.GetType() == typeof(int)) idUsuario = value;
+            if (value.GetType() == typeof(int))
+            {
+                idUsuario = value;
+                _isEmpty = false;
+            }
             else idUsuario = 0;
         }
     }
 
-    public Producto() { }
+    public Producto()
+    {
+        if(
+            string.IsNullOrEmpty(descripcion)
+            && costo == 0
+            && precioVenta == 0
+            && stock == 0
+        )
+        {
+            _isEmpty = true;
+        }
+        else _isEmpty = false;
+    }
 
     public Producto(int _id, string _descripcion, decimal _costo, decimal _precioVenta, int _stock, int _idUsuario)
     {

@@ -1,8 +1,5 @@
 ﻿using System.Data.SqlClient;
 
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.EntityFrameworkCore.Update;
-
 namespace Christian_Grimberg_58425_Desafio_2;
 
 internal static class GestorMenu
@@ -33,6 +30,9 @@ internal static class GestorMenu
                 break;
             case "1":
                 MenuUsuarios(connection);
+                break;
+            case "2":
+                MenuProductos(connection);
                 break;
             default:
                 Console.WriteLine("Opción no encontrada");
@@ -156,7 +156,7 @@ internal static class GestorMenu
 
                                 if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
-                                    Console.WriteLine("El nombre se modificó con éxito.");
+                                    Console.WriteLine("El nombre se modificó con éxito");
                                 }
                                 else
                                 {
@@ -169,7 +169,7 @@ internal static class GestorMenu
 
                                 if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
-                                    Console.WriteLine("El apellido se modificó con éxito.");
+                                    Console.WriteLine("El apellido se modificó con éxito");
                                 }
                                 else
                                 {
@@ -182,7 +182,7 @@ internal static class GestorMenu
 
                                 if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
-                                    Console.WriteLine("El nombre del usuario se modificó con éxito.");
+                                    Console.WriteLine("El nombre del usuario se modificó con éxito");
                                 }
                                 else
                                 {
@@ -195,7 +195,7 @@ internal static class GestorMenu
 
                                 if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
-                                    Console.WriteLine("La contraseña se modificó con éxito.");
+                                    Console.WriteLine("La contraseña se modificó con éxito");
                                 }
                                 else
                                 {
@@ -208,7 +208,7 @@ internal static class GestorMenu
 
                                 if (!userToUpdate.IsEmpty && UsuarioData.ModificarUsuario(connection, userToUpdate))
                                 {
-                                    Console.WriteLine("El email se modificó con éxito.");
+                                    Console.WriteLine("El email se modificó con éxito");
                                 }
                                 else
                                 {
@@ -241,7 +241,217 @@ internal static class GestorMenu
                         && UsuarioData.EliminarUsuario(connection, userToDelete)
                     )
                     {
-                        Console.WriteLine("Se eliminó el usuario y toda su actividad.");
+                        Console.WriteLine("Se eliminó el usuario y toda su actividad");
+                    }
+                }
+                break;
+            default:
+                Console.WriteLine("Opción no encontrada");
+                break;
+        }
+
+        Console.WriteLine("Presione una tecla para continuar...");
+        Console.ReadKey();
+    }
+
+    private static void MenuProductos(SqlConnection connection)
+    {
+        string productsMenu = string.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}",
+                "===========MENU PRODUCTOS==========",
+                "-------Seleccione un numero-------",
+                "1 - Obtener producto por ID",
+                "2 - Listar productos",
+                "3 - Crear productos",
+                "4 - Modificar productos",
+                "5 - Eliminar productos",
+                "-----------------------------------"
+            );
+        string productUpdateMenu = string.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}",
+            "===========MODIFICAR PRODUCTO==========",
+            "-------Seleccione un numero-------",
+            "1 - Modificar la descripcion",
+            "2 - Modificar el costo",
+            "3 - Modificar el precio de venta",
+            "4 - Modificar el stock",
+            "5 - Modificar el ID del usuario",
+            "---------------------------------------"
+        );
+
+        Console.Clear();
+        Console.WriteLine(productsMenu);
+
+        switch (Input("Seleccione una opcion"))
+        {
+            case "1":
+                Console.Clear();
+                string productId = Input("Ingrese el ID del producto a buscar");
+                Producto product = ProductoData.ObtenerProducto(connection, Convert.ToInt32(productId));
+
+                if (!product.IsEmpty)
+                {
+                    Console.WriteLine("\n===========DATOS DEL PRODUCTO==========\n");
+                    Console.WriteLine(product);
+                    Console.WriteLine("=======================================");
+                }
+                break;
+            case "2":
+                if (ProductoData.ListarProductos(connection).Capacity > 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("===========LISTADO PRODUCTOS==========\n");
+                    foreach (var item in ProductoData.ListarProductos(connection))
+                    {
+                        Console.WriteLine(item);
+                    }
+                    Console.WriteLine("======================================");
+                }
+                else
+                {
+                    Console.WriteLine("No hay productos en el sistema");
+                }
+                break;
+            case "3":
+                Producto newProduct = new Producto();
+                Console.Clear();
+                try
+                {
+                    Console.WriteLine("===========NUEVO PRODUCTO==========\n");
+                    Console.Write("Ingrese la descripcion: ");
+                    newProduct.Descripcion = Console.ReadLine();
+                    Console.Write("Ingrese el costo: ");
+                    newProduct.Costo = Convert.ToDecimal(Console.ReadLine());
+                    Console.Write("Ingrese el precio de venta: ");
+                    newProduct.PrecioVenta = Convert.ToDecimal(Console.ReadLine());
+                    Console.Write("Ingrese el stock: ");
+                    newProduct.Stock = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Ingrese el ID del usuario: ");
+                    newProduct.IdUsuario = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("===================================");
+
+                    if (!newProduct.IsEmpty && ProductoData.CrearProducto(connection, newProduct))
+                    {
+                        Console.WriteLine("Producto creado con éxito");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[APPLICATION ERROR]: {ex.Message}");
+                }
+                break;
+            case "4":
+                Console.Clear();
+                string agreeToUpdate;
+                string productIdToUpdate = Input("Ingrese el ID a modificar");
+                string fieldOption;
+                Producto productToUpdate = ProductoData.ObtenerProducto(connection, Convert.ToInt32(productIdToUpdate));
+
+                if (!productToUpdate.IsEmpty)
+                {
+                    Console.WriteLine("\n===========DATOS DEL PRODUCTO==========\n");
+                    Console.WriteLine(productToUpdate);
+                    Console.WriteLine("=======================================");
+
+                    agreeToUpdate = Input("Desea modificar al producto? S(Si) - N(No)");
+                    if (!string.IsNullOrEmpty(agreeToUpdate) && agreeToUpdate.ToUpper()[0] == 'S')
+                    {
+                        Console.Clear();
+                        Console.WriteLine(productUpdateMenu);
+                        fieldOption = Input("Seleccione una opcion");
+
+                        switch (fieldOption)
+                        {
+                            case "1":
+                                Console.Write("Ingrese la nueva descripcion: ");
+                                productToUpdate.Descripcion = Console.ReadLine();
+
+                                if (!productToUpdate.IsEmpty && ProductoData.ModificarProducto(connection, productToUpdate))
+                                {
+                                    Console.WriteLine("La descipción se modificó con éxito");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se pudo modificar la descipción");
+                                }
+                                break;
+                            case "2":
+                                Console.Write("Ingrese el nuevo costo: ");
+                                productToUpdate.Costo = Convert.ToDecimal(Console.ReadLine());
+
+                                if (!productToUpdate.IsEmpty && ProductoData.ModificarProducto(connection, productToUpdate))
+                                {
+                                    Console.WriteLine("El costo se modificó con éxito");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se pudo modificar el costo");
+                                }
+                                break;
+                            case "3":
+                                Console.Write("Ingrese el nuevo precio de venta: ");
+                                productToUpdate.PrecioVenta = Convert.ToDecimal(Console.ReadLine());
+
+                                if (!productToUpdate.IsEmpty && ProductoData.ModificarProducto(connection, productToUpdate))
+                                {
+                                    Console.WriteLine("El precio de venta se modificó con éxito");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se pudo modificar el precio de venta");
+                                }
+                                break;
+                            case "4":
+                                Console.Write("Ingrese el nuevo stock: ");
+                                productToUpdate.Stock = Convert.ToInt32(Console.ReadLine());
+
+                                if (!productToUpdate.IsEmpty && ProductoData.ModificarProducto(connection, productToUpdate))
+                                {
+                                    Console.WriteLine("El stock se modificó con éxito");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se pudo modificar el stock");
+                                }
+                                break;
+                            case "5":
+                                Console.Write("Ingrese el nuevo ID de usuario: ");
+                                productToUpdate.IdUsuario = Convert.ToInt32(Console.ReadLine());
+
+                                if (!productToUpdate.IsEmpty && ProductoData.ModificarProducto(connection, productToUpdate))
+                                {
+                                    Console.WriteLine("El ID de usuario se modificó con éxito");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se pudo modificar el ID de usuario");
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                break;
+            case "5":
+                string agreeToDelete;
+
+                Console.Clear();
+                string productIdToDelete = Input("Ingrese el ID del producto y toda su actividad a eliminar");
+                Producto productToDelete = ProductoData.ObtenerProducto(connection, Convert.ToInt32(productIdToDelete));
+
+                if (!productToDelete.IsEmpty)
+                {
+                    Console.WriteLine("\n===========DATOS DEL PRODUCTO==========\n");
+                    Console.WriteLine(productToDelete);
+                    Console.WriteLine("=======================================");
+                    agreeToDelete = Input("Desea eliminar al producto y toda su actividad? S(Si) - N(No)");
+
+                    if (
+                        !string.IsNullOrEmpty(agreeToDelete)
+                        && agreeToDelete.ToUpper()[0] == 'S'
+                        && ProductoData.EliminarProducto(connection, productToDelete)
+                    )
+                    {
+                        Console.WriteLine("Se eliminó el producto y toda su actividad");
                     }
                 }
                 break;

@@ -97,16 +97,14 @@ internal static class ProductoData
 		bool created = false;
 		string queryInsertProduct = $@"
 		INSERT INTO [{connection.Database}].[dbo].[Producto] (
-			[Id]
-			,[Descripciones]
+			[Descripciones]
 			,[Costo]
 			,[PrecioVenta]
 			,[Stock]
 			,[IdUsuario]
 		)
 		VALUES (
-			'{product.Id}'
-			,'{product.Descripcion}'
+			'{product.Descripcion}'
 			,'{product.Costo}'
 			,'{product.PrecioVenta}'
 			,'{product.Stock}'
@@ -135,8 +133,7 @@ internal static class ProductoData
 		string queryUpdateProduct = $@"
 		UPDATE [{connection.Database}].[dbo].[Producto]
 		SET
-      [Id] = '{product.Id}'
-			,[Descripciones] = '{product.Descripcion}'
+      [Descripciones] = '{product.Descripcion}'
 			,[Costo] = '{product.Costo}'
 			,[PrecioVenta] = '{product.PrecioVenta}'
 			,[Stock] = '{product.Stock}'
