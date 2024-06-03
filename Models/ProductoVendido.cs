@@ -4,6 +4,12 @@ namespace Christian_Grimberg_58425_Desafio_2;
 
 public class ProductoVendido
 {
+    private bool _isEmpty;
+    public bool IsEmpty
+    {
+        get { return _isEmpty; }
+    }
+
     private int id;
     public int Id
     {
@@ -14,7 +20,11 @@ public class ProductoVendido
         }
         set
         {
-            if (value.GetType() == typeof(int)) id = value;
+            if (value.GetType() == typeof(int))
+            {
+                id = value;
+                _isEmpty = false;
+            }
             else id = 0;
         }
     }
@@ -29,7 +39,11 @@ public class ProductoVendido
         }
         set
         {
-            if (value.GetType() == typeof(int)) idProducto = value;
+            if (value.GetType() == typeof(int))
+            {
+                idProducto = value;
+                _isEmpty = false;
+            }
             else idProducto = 0;
         }
     }
@@ -44,7 +58,11 @@ public class ProductoVendido
         }
         set
         {
-            if (value.GetType() == typeof(int)) stock = value;
+            if (value.GetType() == typeof(int))
+            {
+                stock = value;
+                _isEmpty = false;
+            }
             else stock = 0;
         }
     }
@@ -59,12 +77,27 @@ public class ProductoVendido
         }
         set
         {
-            if (value.GetType() == typeof(int)) idVenta = value;
+            if (value.GetType() == typeof(int))
+            {
+                idVenta = value;
+                _isEmpty = false;
+            }
             else idVenta = 0;
         }
     }
 
-    public ProductoVendido() { }
+    public ProductoVendido()
+    {
+        if(
+            idProducto == 0
+            && stock == 0
+            && idVenta == 0
+        )
+        {
+            _isEmpty = true;
+        }
+        else _isEmpty = false;
+    }
 
     public ProductoVendido(int _id, int _idProducto, int _stock, int _idVenta)
     {
