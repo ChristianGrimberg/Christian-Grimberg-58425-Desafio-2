@@ -4,6 +4,12 @@ namespace Christian_Grimberg_58425_Desafio_2;
 
 public class Venta
 {
+    private bool _isEmpty;
+    public bool IsEmpty
+    {
+        get { return _isEmpty; }
+    }
+
     private int id;
     public int Id
     {
@@ -14,7 +20,11 @@ public class Venta
         }
         set
         {
-            if (value.GetType() == typeof(int)) id = value;
+            if (value.GetType() == typeof(int))
+            {
+                id = value;
+                _isEmpty = false;
+            }
             else id = 0;
         }
     }
@@ -24,12 +34,16 @@ public class Venta
     {
         get
         {
-            if (string.IsNullOrEmpty(comentarios)) comentarios = "sin Descripcion";
+            if (string.IsNullOrEmpty(comentarios)) comentarios = "sin Comentarios";
             return comentarios;
         }
         set
         {
-            if (!string.IsNullOrEmpty(value)) comentarios = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                comentarios = value;
+                _isEmpty = false;
+            }
             else comentarios = string.Empty;
         }
     }
@@ -44,12 +58,26 @@ public class Venta
         }
         set
         {
-            if (value.GetType() == typeof(int)) idUsuario = value;
+            if (value.GetType() == typeof(int))
+            {
+                idUsuario = value;
+                _isEmpty = false;
+            }
             else idUsuario = 0;
         }
     }
 
-    public Venta() { }
+    public Venta()
+    {
+        if(
+            string.IsNullOrEmpty(comentarios)
+            && idUsuario == 0
+        )
+        {
+            _isEmpty = true;
+        }
+        else _isEmpty = false;
+    }
 
     public Venta(int _id, string _comentarios, int _idUsuario)
     {

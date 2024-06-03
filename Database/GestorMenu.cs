@@ -37,6 +37,9 @@ internal static class GestorMenu
             case "3":
                 MenuProductosVendidos(connection);
                 break;
+            case "4":
+                MenuVentas(connection);
+                break;
             default:
                 Console.WriteLine("Opción no encontrada");
                 Console.WriteLine("Presione una tecla para continuar...");
@@ -633,6 +636,168 @@ internal static class GestorMenu
                     )
                     {
                         Console.WriteLine("Se eliminó el producto vendido y toda su actividad");
+                    }
+                }
+                break;
+            default:
+                Console.WriteLine("Opción no encontrada");
+                break;
+        }
+
+        Console.WriteLine("Presione una tecla para continuar...");
+        Console.ReadKey();
+    }
+
+    private static void MenuVentas(SqlConnection connection)
+    {
+        string ventasMenu = string.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}",
+                "===========MENU VENTAS==========",
+                "-------Seleccione un numero-------",
+                "1 - Obtener ventas por ID",
+                "2 - Listar ventas",
+                "3 - Ingresar una venta",
+                "4 - Modificar una venta",
+                "5 - Eliminar una venta",
+                "--------------------------------"
+            );
+        string ventasUpdateMenu = string.Format("{0}\n{1}\n{2}\n{3}",
+            "===========MODIFICAR VENTAS==========",
+            "-------Seleccione un numero-------",
+            "1 - Modificar el comentario",
+            "2 - Modificar el ID de usuario",
+            "-------------------------------------"
+        );
+
+        Console.Clear();
+        Console.WriteLine(ventasMenu);
+
+        switch (Input("Seleccione una opcion"))
+        {
+            case "1":
+                Console.Clear();
+                string ventaId = Input("Ingrese el ID de la venta a buscar");
+                Venta venta = VentaData.ObtenerVenta(connection, Convert.ToInt32(ventaId));
+
+                if (!venta.IsEmpty)
+                {
+                    Console.WriteLine("\n===========DATOS DE LA VENTA==========\n");
+                    Console.WriteLine(venta);
+                    Console.WriteLine("======================================");
+                }
+                break;
+            case "2":
+                if (VentaData.ListarVentas(connection).Capacity > 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("===========LISTADO DE VENTAS==========\n");
+                    foreach (var item in VentaData.ListarVentas(connection))
+                    {
+                        Console.WriteLine(item);
+                    }
+                    Console.WriteLine("==================================================");
+                }
+                else
+                {
+                    Console.WriteLine("No hay ventas en el sistema");
+                }
+                break;
+            case "3":
+                Venta newVenta = new Venta();
+                Console.Clear();
+                try
+                {
+                    Console.WriteLine("===========INGRESAR UNA VENTA==========\n");
+                    Console.Write("Ingrese el comentario: ");
+                    newVenta.Comentarios = Console.ReadLine();
+                    Console.Write("Ingrese el ID de usuario: ");
+                    newVenta.IdUsuario = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("=======================================");
+
+                    if (!newVenta.IsEmpty && VentaData.CrearVenta(connection, newVenta))
+                    {
+                        Console.WriteLine("Venta ingresada con éxito");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[APPLICATION ERROR]: {ex.Message}");
+                }
+                break;
+            case "4":
+                Console.Clear();
+                string agreeToUpdate;
+                string ventaIdToUpdate = Input("Ingrese el ID a modificar");
+                string fieldOption;
+                Venta ventaToUpdate = VentaData.ObtenerVenta(connection, Convert.ToInt32(ventaIdToUpdate));
+
+                if (!ventaToUpdate.IsEmpty)
+                {
+                    Console.WriteLine("\n===========DATOS DE LA VENTA==========\n");
+                    Console.WriteLine(ventaToUpdate);
+                    Console.WriteLine("======================================");
+
+                    agreeToUpdate = Input("Desea modificar la venta? S(Si) - N(No)");
+                    if (!string.IsNullOrEmpty(agreeToUpdate) && agreeToUpdate.ToUpper()[0] == 'S')
+                    {
+                        Console.Clear();
+                        Console.WriteLine(ventasUpdateMenu);
+                        fieldOption = Input("Seleccione una opcion");
+
+                        switch (fieldOption)
+                        {
+                            case "1":
+                                Console.Write("Ingrese el nuevo comentario: ");
+                                ventaToUpdate.Comentarios = Console.ReadLine();
+
+                                if (!ventaToUpdate.IsEmpty && VentaData.ModificarVenta(connection, ventaToUpdate))
+                                {
+                                    Console.WriteLine("El comentario se modificó con éxito");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se pudo modificar el comentario");
+                                }
+                                break;
+                            case "2":
+                                Console.Write("Ingrese el nuevo ID de usuario: ");
+                                ventaToUpdate.IdUsuario = Convert.ToInt32(Console.ReadLine());
+
+                                if (!ventaToUpdate.IsEmpty && VentaData.ModificarVenta(connection, ventaToUpdate))
+                                {
+                                    Console.WriteLine("El ID de usuario se modificó con éxito");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se pudo modificar el ID de usuario");
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                break;
+            case "5":
+                string agreeToDelete;
+
+                Console.Clear();
+                string ventaIdToDelete = Input("Ingrese el ID de la venta y toda su actividad a eliminar");
+                Venta ventaToDelete = VentaData.ObtenerVenta(connection, Convert.ToInt32(ventaIdToDelete));
+
+                if (!ventaToDelete.IsEmpty)
+                {
+                    Console.WriteLine("\n===========DATOS DE LA VENTA==========\n");
+                    Console.WriteLine(ventaToDelete);
+                    Console.WriteLine("======================================");
+                    agreeToDelete = Input("Desea eliminar a la venta y toda su actividad? S(Si) - N(No)");
+
+                    if (
+                        !string.IsNullOrEmpty(agreeToDelete)
+                        && agreeToDelete.ToUpper()[0] == 'S'
+                        && VentaData.EliminarVenta(connection, ventaToDelete)
+                    )
+                    {
+                        Console.WriteLine("Se eliminó la venta y toda su actividad");
                     }
                 }
                 break;
